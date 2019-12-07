@@ -1,0 +1,3 @@
+/cygdrive/c/Users/merzl/CLionProjects/Sea_Battle/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+/cygdrive/c/Users/merzl/CLionProjects/Sea_Battle/cmake-build-debug/CMakeFiles/Sea_Battle.dir
+/cygdrive/c/Users/merzl/CLionProjects/Sea_Battle/cmake-build-debug/CMakeFiles/edit_cache.dir
