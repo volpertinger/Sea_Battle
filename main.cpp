@@ -373,7 +373,7 @@ void user_set_ship(map <string, unsigned short> &my_battle_field){
         cout<<"deploying 4-decks ship"<<endl;
         cout<<"enter coordinates"<<endl;
         cin>>coordinates;
-        if(!(coordinates[0]>='A' && coordinates[0]<='j' && coordinates[1]>=0 && coordinates[1]<=9))
+        if(!((coordinates[0]>='A' && coordinates[0]<='J') && (coordinates[1]>=0 && coordinates[1]<=9)))
             cout<<"wrong coordinates"<<endl;
         else
         {
@@ -396,7 +396,7 @@ void user_set_ship(map <string, unsigned short> &my_battle_field){
         cout<<"deploying 3-decks ship"<<endl;
         cout<<"enter coordinates"<<endl;
         cin>>coordinates;
-        if(!(coordinates[0]>='A' && coordinates[0]<='j' && coordinates[1]>=0 && coordinates[1]<=9))
+        if(!((coordinates[0]>='A' && coordinates[0]<='J') && (coordinates[1]>=0 && coordinates[1]<=9)))
             cout<<"wrong coordinates"<<endl;
         else
         {
@@ -419,7 +419,7 @@ void user_set_ship(map <string, unsigned short> &my_battle_field){
         cout<<"deploying 2-decks ship"<<endl;
         cout<<"enter coordinates"<<endl;
         cin>>coordinates;
-        if(!(coordinates[0]>='A' && coordinates[0]<='j' && coordinates[1]>=0 && coordinates[1]<=9))
+        if(!((coordinates[0]>='A' && coordinates[0]<='J') && (coordinates[1]>=0 && coordinates[1]<=9)))
             cout<<"wrong coordinates"<<endl;
         else
         {
@@ -442,7 +442,7 @@ void user_set_ship(map <string, unsigned short> &my_battle_field){
         cout<<"deploying 1-deck ship"<<endl;
         cout<<"enter coordinates"<<endl;
         cin>>coordinates;
-        if(!(coordinates[0]>='A' && coordinates[0]<='j' && coordinates[1]>=0 && coordinates[1]<=9))
+        if(!((coordinates[0]>='A' && coordinates[0]<='J') && (coordinates[1]>=0 && coordinates[1]<=9)))
             cout<<"wrong coordinates"<<endl;
         else
         {
