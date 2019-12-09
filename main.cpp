@@ -8,6 +8,7 @@ using std::string;
 using std::endl;
 using std::map;
 using std::pair;
+using std::srand;
 
 //making clear battlefield
 void clear_battlefield (map <string, unsigned short> &battle_field) {
@@ -135,7 +136,7 @@ bool check (map <string, unsigned short> battle_field, string coordinates, int d
     return result;
 }
 
-//set ships ////доделать
+//set ships
 void set_ship (map <string, unsigned short> &battle_field, string coordinates, int decks, string direction) {
     int i = 0;
     string sub_coordinates = coordinates;
@@ -364,7 +365,145 @@ void set_ship (map <string, unsigned short> &battle_field, string coordinates, i
     }
     }
 
-int main(){
+//user sets ships
+void user_set_ship(map <string, unsigned short> &my_battle_field){
+    string direction,coordinates="A0";
+    int ship_value=0;
+    while (ship_value != 1){
+        cout<<"deploying 4-decks ship"<<endl;
+        cout<<"enter coordinates"<<endl;
+        cin>>coordinates;
+        if(!(coordinates[0]>='A' && coordinates[0]<='j' && coordinates[1]>=0 && coordinates[1]<=9))
+            cout<<"wrong coordinates"<<endl;
+        else
+        {
+            cout << "enter direction" << endl;
+            cin >> direction;
+            if (!(direction=="right" || direction=="left" || direction=="up" || direction=="down"))
+                cout<<"wrong direction"<<endl;
+            else {
+                if (check(my_battle_field, coordinates, 4, direction)) {
+                    set_ship(my_battle_field, coordinates, 4, direction);
+                    show_battlefield(my_battle_field);
+                    ship_value++;
+                }
+                else
+                    cout<<"cant place here"<<endl;
+            }
+        }
+    }
+    while (ship_value != 3){
+        cout<<"deploying 3-decks ship"<<endl;
+        cout<<"enter coordinates"<<endl;
+        cin>>coordinates;
+        if(!(coordinates[0]>='A' && coordinates[0]<='j' && coordinates[1]>=0 && coordinates[1]<=9))
+            cout<<"wrong coordinates"<<endl;
+        else
+        {
+            cout << "enter direction" << endl;
+            cin >> direction;
+            if (!(direction=="right" || direction=="left" || direction=="up" || direction=="down"))
+                cout<<"wrong direction"<<endl;
+            else {
+                if (check(my_battle_field, coordinates, 3, direction)) {
+                    set_ship(my_battle_field, coordinates, 3, direction);
+                    show_battlefield(my_battle_field);
+                    ship_value++;
+                }
+                else
+                    cout<<"cant place here"<<endl;
+            }
+        }
+    }
+    while (ship_value != 6){
+        cout<<"deploying 2-decks ship"<<endl;
+        cout<<"enter coordinates"<<endl;
+        cin>>coordinates;
+        if(!(coordinates[0]>='A' && coordinates[0]<='j' && coordinates[1]>=0 && coordinates[1]<=9))
+            cout<<"wrong coordinates"<<endl;
+        else
+        {
+            cout << "enter direction" << endl;
+            cin >> direction;
+            if (!(direction=="right" || direction=="left" || direction=="up" || direction=="down"))
+                cout<<"wrong direction"<<endl;
+            else {
+                if (check(my_battle_field, coordinates, 2, direction)) {
+                    set_ship(my_battle_field, coordinates, 2, direction);
+                    show_battlefield(my_battle_field);
+                    ship_value++;
+                }
+                else
+                    cout<<"cant place here"<<endl;
+            }
+        }
+    }
+    while (ship_value != 10){
+        cout<<"deploying 1-deck ship"<<endl;
+        cout<<"enter coordinates"<<endl;
+        cin>>coordinates;
+        if(!(coordinates[0]>='A' && coordinates[0]<='j' && coordinates[1]>=0 && coordinates[1]<=9))
+            cout<<"wrong coordinates"<<endl;
+        else
+        {
+            if (check(my_battle_field, coordinates, 1, "here")) {
+                set_ship(my_battle_field, coordinates, 1, "here");
+                show_battlefield(my_battle_field);
+                ship_value++;
+            }
+            else
+                cout<<"cant place here"<<endl;
+        }
+    }
+}
+
+//generating bot coordinates
+string gen_coordinates (){
+    unsigned int intword, intvalue;
+    string coordinates="A0";
+    char  word, value;
+    srand (time (NULL));
+    intword=rand() % 10;
+    intvalue=rand() % 10;
+    switch (intword) {
+        case 0: word='A'; break;
+        case 1: word='B'; break;
+        case 2: word='C'; break;
+        case 3: word='D'; break;
+        case 4: word='E'; break;
+        case 5: word='F'; break;
+        case 6: word='G'; break;
+        case 7: word='H'; break;
+        case 8: word='I'; break;
+        case 9: word='J'; break;
+    }
+    switch (intvalue) {
+        case 0: value='0'; break;
+        case 1: value='1'; break;
+        case 2: value='2'; break;
+        case 3: value='3'; break;
+        case 4: value='4'; break;
+        case 5: value='5'; break;
+        case 6: value='6'; break;
+        case 7: value='7'; break;
+        case 8: value='8'; break;
+        case 9: value='9'; break;
+    }
+    coordinates[0]=word;
+    coordinates[1]=value;
+    return coordinates;
+}
+
+//bot sets ships
+void bot_set_ships (map <string, unsigned short> &bot_battle_field){
+    string direction,coordinates="A0", word;
+    int ship_value=0;
+
+    while(ship_value !=10){
+
+    }
+}
+    int main(){
 
     //O-empty, *-shoot, | - border, + - part of the ship
     //0-empty, 1-shoot, 2-sheep, 3-unable to set ship, 4-after destroy will be shoot;
@@ -384,92 +523,7 @@ int main(){
     show_battlefield (my_battle_field);
     show_battlefield (bot_battle_field);
 
-        while (ship_value != 1){
-        cout<<"deploying 4-decks ship"<<endl;
-        cout<<"enter coordinates"<<endl;
-        cin>>coordinates;
-            if(!(coordinates[0]>='A' && coordinates[0]<='j' && coordinates[1]>='0' && coordinates[1]<='9'))
-                cout<<"wrong coordinates"<<endl;
-            else
-                {
-            cout << "enter direction" << endl;
-            cin >> direction;
-            if (!(direction=="right" || direction=="left" || direction=="up" || direction=="down"))
-                cout<<"wrong direction"<<endl;
-            else {
-                if (check(my_battle_field, coordinates, 4, direction)) {
-                    set_ship(my_battle_field, coordinates, 4, direction);
-                    show_battlefield(my_battle_field);
-                    ship_value++;
-                }
-                else
-                    cout<<"cant place here"<<endl;
-            }
-        }
-        }
-        while (ship_value != 3){
-            cout<<"deploying 3-decks ship"<<endl;
-            cout<<"enter coordinates"<<endl;
-            cin>>coordinates;
-            if(!(coordinates[0]>='A' && coordinates[0]<='j' && coordinates[1]>='0' && coordinates[1]<='9'))
-                cout<<"wrong coordinates"<<endl;
-            else
-            {
-                cout << "enter direction" << endl;
-                cin >> direction;
-                if (!(direction=="right" || direction=="left" || direction=="up" || direction=="down"))
-                    cout<<"wrong direction"<<endl;
-                else {
-                    if (check(my_battle_field, coordinates, 3, direction)) {
-                        set_ship(my_battle_field, coordinates, 3, direction);
-                        show_battlefield(my_battle_field);
-                        ship_value++;
-                    }
-                    else
-                        cout<<"cant place here"<<endl;
-                }
-            }
-        }
-        while (ship_value != 6){
-            cout<<"deploying 2-decks ship"<<endl;
-            cout<<"enter coordinates"<<endl;
-            cin>>coordinates;
-            if(!(coordinates[0]>='A' && coordinates[0]<='j' && coordinates[1]>='0' && coordinates[1]<='9'))
-                cout<<"wrong coordinates"<<endl;
-            else
-            {
-                cout << "enter direction" << endl;
-                cin >> direction;
-                if (!(direction=="right" || direction=="left" || direction=="up" || direction=="down"))
-                    cout<<"wrong direction"<<endl;
-                else {
-                    if (check(my_battle_field, coordinates, 2, direction)) {
-                        set_ship(my_battle_field, coordinates, 2, direction);
-                        show_battlefield(my_battle_field);
-                        ship_value++;
-                    }
-                    else
-                        cout<<"cant place here"<<endl;
-                }
-            }
-        }
-        while (ship_value != 10){
-            cout<<"deploying 1-deck ship"<<endl;
-            cout<<"enter coordinates"<<endl;
-            cin>>coordinates;
-            if(!(coordinates[0]>='A' && coordinates[0]<='j' && coordinates[1]>='0' && coordinates[1]<='9'))
-                cout<<"wrong coordinates"<<endl;
-            else
-            {
-                    if (check(my_battle_field, coordinates, 1, "here")) {
-                        set_ship(my_battle_field, coordinates, 1, "here");
-                        show_battlefield(my_battle_field);
-                        ship_value++;
-                    }
-                    else
-                        cout<<"cant place here"<<endl;
-                }
-            }
+    user_set_ship(my_battle_field);
 
     return 0;
 }
