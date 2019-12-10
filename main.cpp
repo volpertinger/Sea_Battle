@@ -37,11 +37,13 @@ void show_battlefield (map <string, unsigned short> battle_field){
             if (battle_field[coordinates]==0)
                 cout<<"0";
             if (battle_field[coordinates]==1)
-                cout<<"1";
+                cout<<"*";
             if (battle_field[coordinates]==2)
                 cout<<"+";
             if (battle_field[coordinates]==3)
-                cout<<"*";
+                cout<<"3";
+            if (battle_field[coordinates]==4)
+                cout<<"4";
             cout<<" ";
             coordinates[0]++;
         }
@@ -620,9 +622,88 @@ void bot_set_ships (map <string, unsigned short> &bot_battle_field){
     }
 }
 
+//transforming code 3 to code 4 after shot
+void transform (map <string, unsigned short> &battle_field, string coordinates){
+    if (check_down_set(battle_field,  coordinates)){
+        ++coordinates[1];
+        battle_field[coordinates]=4;
+        if(check_left_set(battle_field,  coordinates)){
+            --coordinates[0];
+            battle_field[coordinates]=4;
+            ++coordinates[0];
+        }
+        if(check_right_set(battle_field,  coordinates)){
+            ++coordinates[0];
+            battle_field[coordinates]=4;
+            --coordinates[0];
+        }
+        --coordinates[1];
+    }
+    if (check_up_set(battle_field,  coordinates)){
+        --coordinates[1];
+        battle_field[coordinates]=4;
+        if(check_left_set(battle_field,  coordinates)){
+            --coordinates[0];
+            battle_field[coordinates]=4;
+            ++coordinates[0];
+        }
+        if(check_right_set(battle_field,  coordinates)){
+            ++coordinates[0];
+            battle_field[coordinates]=4;
+            --coordinates[0];
+        }
+        ++coordinates[1];
+    }
+    if (check_left_set(battle_field,  coordinates)){
+        --coordinates[0];
+        battle_field[coordinates]=4;
+        if(check_up_set(battle_field,  coordinates)){
+            --coordinates[1];
+            battle_field[coordinates]=4;
+            ++coordinates[1];
+        }
+        if(check_down_set(battle_field,  coordinates)){
+            ++coordinates[1];
+            battle_field[coordinates]=4;
+            --coordinates[1];
+        }
+        ++coordinates[0];
+    }
+    if (check_right_set(battle_field,  coordinates)){
+        ++coordinates[0];
+        battle_field[coordinates]=4;
+        if(check_up_set(battle_field,  coordinates)){
+            --coordinates[1];
+            battle_field[coordinates]=4;
+            ++coordinates[1];
+        }
+        if(check_down_set(battle_field,  coordinates)){
+            ++coordinates[1];
+            battle_field[coordinates]=4;
+            --coordinates[1];
+        }
+        --coordinates[0];
+    }
+}
+
+//transforming code 4 to code 1 after destroing ship
+void transform (map <string, unsigned short> &battle_field){
+    int i=0, j=0;
+    string coordinates="A0";
+    for(i=0;i<10;i++){
+        coordinates[0]='A';
+        for(j=0;j<10;j++){
+            if (battle_field[coordinates]==4)
+                battle_field[coordinates]=1;
+            coordinates[0]++;
+        }
+        coordinates[1]++;
+    }
+}
+
     int main(){
 
-        //O-empty, *-shoot, | - border, + - part of the ship, #-destroyed part of ship
+    //O-empty, *-shoot, | - border, + - part of the ship, #-destroyed part of ship
     //0-empty, 1-shoot, 2-ship, 3-unable to set ship, 4-after destroy will be shoot;
 
     string direction,coordinates="A0";
@@ -639,11 +720,29 @@ void bot_set_ships (map <string, unsigned short> &bot_battle_field){
     show_battlefield (my_battle_field);
     show_battlefield (bot_battle_field);
 
-    //user_set_ship(my_battle_field);
-    //show_battlefield (my_battle_field);
-
     bot_set_ships(bot_battle_field);
     show_battlefield (bot_battle_field);
+
+    cout<<"enter transform coord"<<endl;
+    cin>>coordinates;
+    transform(bot_battle_field, coordinates);
+    show_battlefield (bot_battle_field);
+
+    cout<<"enter transform coord"<<endl;
+    cin>>coordinates;
+    transform(bot_battle_field, coordinates);
+    show_battlefield (bot_battle_field);
+
+    cout<<"enter transform coord"<<endl;
+    cin>>coordinates;
+    transform(bot_battle_field, coordinates);
+    show_battlefield (bot_battle_field);
+
+    transform(bot_battle_field);
+    show_battlefield (bot_battle_field);
+
+    user_set_ship(my_battle_field);
+    show_battlefield (my_battle_field);
 
 
     return 0;
