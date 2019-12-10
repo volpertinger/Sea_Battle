@@ -701,6 +701,7 @@ void transform (map <string, unsigned short> &battle_field){
     }
 }
 
+
     int main(){
 
     //O-empty, *-shoot, | - border, + - part of the ship, #-destroyed part of ship
