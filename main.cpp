@@ -34,16 +34,15 @@ void show_battlefield (map <string, unsigned short> battle_field){
         coordinates[0]='A';
         cout<<i<<"|";
         for(j=0;j<10;j++){
-            if (battle_field[coordinates]==0)
-                cout<<"0";
-            if (battle_field[coordinates]==1)
-                cout<<"*";
-            if (battle_field[coordinates]==2)
-                cout<<"+";
-            if (battle_field[coordinates]==3)
-                cout<<"3";
-            if (battle_field[coordinates]==4)
-                cout<<"4";
+            switch (battle_field[coordinates]) {
+                case 0:cout << '0';break;
+                case 1:cout << '*';break;
+                case 2:cout << '+';break;
+                case 3:cout << '-';break;
+                case 4:cout << '=';break;
+                case 5:cout << '#';break;
+                default: cout<<'&';
+            }
             cout<<" ";
             coordinates[0]++;
         }
@@ -103,7 +102,7 @@ bool check_left_set(map <string, unsigned short> battle_field, string coordinate
     bool result=0;
     if (coordinates[0] != 'A') {
         --coordinates[0];
-        if((battle_field[coordinates]==0) || (battle_field[coordinates]==3))
+        if((battle_field[coordinates]==0) || (battle_field[coordinates]==3) || (battle_field[coordinates]==1))
             result=1;
     }
     return result;
@@ -114,7 +113,7 @@ bool check_right_set(map <string, unsigned short> battle_field, string coordinat
     bool result=0;
     if (coordinates[0] != 'J') {
         ++coordinates[0];
-        if((battle_field[coordinates]==0) || (battle_field[coordinates]==3))
+        if((battle_field[coordinates]==0) || (battle_field[coordinates]==3) || (battle_field[coordinates]==1))
             result=1;
     }
     return result;
@@ -125,7 +124,7 @@ bool check_up_set(map <string, unsigned short> battle_field, string coordinates)
     bool result=0;
     if (coordinates[1] != '0') {
         --coordinates[1];
-        if((battle_field[coordinates]==0) || (battle_field[coordinates]==3))
+        if((battle_field[coordinates]==0) || (battle_field[coordinates]==3) || (battle_field[coordinates]==1))
             result=1;
     }
     return result;
@@ -136,7 +135,7 @@ bool check_down_set(map <string, unsigned short> battle_field, string coordinate
     bool result=0;
     if (coordinates[1] != '9') {
         ++coordinates[1];
-        if((battle_field[coordinates]==0) || (battle_field[coordinates]==3))
+        if((battle_field[coordinates]==0) || (battle_field[coordinates]==3) || (battle_field[coordinates]==1))
             result=1;
     }
     return result;
@@ -626,14 +625,17 @@ void bot_set_ships (map <string, unsigned short> &bot_battle_field){
 void transform (map <string, unsigned short> &battle_field, string coordinates){
     if (check_down_set(battle_field,  coordinates)){
         ++coordinates[1];
+        if(! (battle_field[coordinates]==1))
         battle_field[coordinates]=4;
         if(check_left_set(battle_field,  coordinates)){
             --coordinates[0];
+            if(! (battle_field[coordinates]==1))
             battle_field[coordinates]=4;
             ++coordinates[0];
         }
         if(check_right_set(battle_field,  coordinates)){
             ++coordinates[0];
+            if(! (battle_field[coordinates]==1))
             battle_field[coordinates]=4;
             --coordinates[0];
         }
@@ -641,14 +643,17 @@ void transform (map <string, unsigned short> &battle_field, string coordinates){
     }
     if (check_up_set(battle_field,  coordinates)){
         --coordinates[1];
+        if(! (battle_field[coordinates]==1))
         battle_field[coordinates]=4;
         if(check_left_set(battle_field,  coordinates)){
             --coordinates[0];
+            if(! (battle_field[coordinates]==1))
             battle_field[coordinates]=4;
             ++coordinates[0];
         }
         if(check_right_set(battle_field,  coordinates)){
             ++coordinates[0];
+            if(! (battle_field[coordinates]==1))
             battle_field[coordinates]=4;
             --coordinates[0];
         }
@@ -656,14 +661,17 @@ void transform (map <string, unsigned short> &battle_field, string coordinates){
     }
     if (check_left_set(battle_field,  coordinates)){
         --coordinates[0];
+        if(! (battle_field[coordinates]==1))
         battle_field[coordinates]=4;
         if(check_up_set(battle_field,  coordinates)){
             --coordinates[1];
+            if(! (battle_field[coordinates]==1))
             battle_field[coordinates]=4;
             ++coordinates[1];
         }
         if(check_down_set(battle_field,  coordinates)){
             ++coordinates[1];
+            if(! (battle_field[coordinates]==1))
             battle_field[coordinates]=4;
             --coordinates[1];
         }
@@ -671,14 +679,17 @@ void transform (map <string, unsigned short> &battle_field, string coordinates){
     }
     if (check_right_set(battle_field,  coordinates)){
         ++coordinates[0];
+        if(! (battle_field[coordinates]==1))
         battle_field[coordinates]=4;
         if(check_up_set(battle_field,  coordinates)){
             --coordinates[1];
+            if(! (battle_field[coordinates]==1))
             battle_field[coordinates]=4;
             ++coordinates[1];
         }
         if(check_down_set(battle_field,  coordinates)){
             ++coordinates[1];
+            if(! (battle_field[coordinates]==1))
             battle_field[coordinates]=4;
             --coordinates[1];
         }
@@ -701,11 +712,21 @@ void transform (map <string, unsigned short> &battle_field){
     }
 }
 
+//shooting
+void shoot (map <string, unsigned short> &battle_field, string coordinates){
+    switch(battle_field[coordinates]){
+        case 0 :battle_field[coordinates]=1;break;
+        case 2 :battle_field[coordinates]=4;break;
+        case 3 :battle_field[coordinates]=1;break;
+        case 5 :battle_field[coordinates]=1;break;
+    }
+}
+
 
     int main(){
 
     //O-empty, *-shoot, | - border, + - part of the ship, #-destroyed part of ship
-    //0-empty, 1-shoot, 2-ship, 3-unable to set ship, 4-after destroy will be shoot;
+    //0-empty, 1-shoot, 2-ship, 3-unable to set ship, 4-destroyed part of ship ,5 - after destroy will be shoot;
 
     string direction,coordinates="A0";
     int i=0, decks, ship_value=0;
