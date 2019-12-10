@@ -39,9 +39,9 @@ void show_battlefield (map <string, unsigned short> battle_field){
             if (battle_field[coordinates]==1)
                 cout<<"1";
             if (battle_field[coordinates]==2)
-                cout<<"*";
+                cout<<"+";
             if (battle_field[coordinates]==3)
-                cout<<"-";
+                cout<<"*";
             cout<<" ";
             coordinates[0]++;
         }
@@ -622,8 +622,8 @@ void bot_set_ships (map <string, unsigned short> &bot_battle_field){
 
     int main(){
 
-    //O-empty, *-shoot, | - border, + - part of the ship
-    //0-empty, 1-shoot, 2-sheep, 3-unable to set ship, 4-after destroy will be shoot;
+        //O-empty, *-shoot, | - border, + - part of the ship, #-destroyed part of ship
+    //0-empty, 1-shoot, 2-ship, 3-unable to set ship, 4-after destroy will be shoot;
 
     string direction,coordinates="A0";
     int i=0, decks, ship_value=0;
