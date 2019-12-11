@@ -39,8 +39,7 @@ void show_battlefield (map <string, unsigned short> battle_field){
                 case 1:cout << '*';break;
                 case 2:cout << '+';break;
                 case 3:cout << '-';break;
-                case 4:cout << '=';break;
-                case 5:cout << '#';break;
+                case 4:cout << '#';break;
                 default: cout<<'&';
             }
             cout<<" ";
@@ -136,6 +135,50 @@ bool check_down_set(map <string, unsigned short> battle_field, string coordinate
     if (coordinates[1] != '9') {
         ++coordinates[1];
         if((battle_field[coordinates]==0) || (battle_field[coordinates]==3) || (battle_field[coordinates]==1))
+            result=1;
+    }
+    return result;
+}
+
+//check left cell for ship part
+bool check_left_ship(map <string, unsigned short> battle_field, string coordinates){
+    bool result=0;
+    if (coordinates[0] != 'A') {
+        --coordinates[0];
+        if((battle_field[coordinates]==2) || (battle_field[coordinates]==4))
+            result=1;
+    }
+    return result;
+}
+
+//check right cell for ship part
+bool check_right_ship(map <string, unsigned short> battle_field, string coordinates){
+    bool result=0;
+    if (coordinates[0] != 'J') {
+        ++coordinates[0];
+        if((battle_field[coordinates]==2) || (battle_field[coordinates]==4))
+            result=1;
+    }
+    return result;
+}
+
+//check up cell for ship part
+bool check_up_ship(map <string, unsigned short> battle_field, string coordinates){
+    bool result=0;
+    if (coordinates[1] != '0') {
+        --coordinates[1];
+        if((battle_field[coordinates]==2) || (battle_field[coordinates]==4))
+            result=1;
+    }
+    return result;
+}
+
+//check down cell for ship part
+bool check_down_ship(map <string, unsigned short> battle_field, string coordinates){
+    bool result=0;
+    if (coordinates[1] != '9') {
+        ++coordinates[1];
+        if((battle_field[coordinates]==2) || (battle_field[coordinates]==4))
             result=1;
     }
     return result;
@@ -621,97 +664,6 @@ void bot_set_ships (map <string, unsigned short> &bot_battle_field){
     }
 }
 
-//transforming code 3 to code 4 after shot
-void transform (map <string, unsigned short> &battle_field, string coordinates){
-    if (check_down_set(battle_field,  coordinates)){
-        ++coordinates[1];
-        if(! (battle_field[coordinates]==1))
-        battle_field[coordinates]=4;
-        if(check_left_set(battle_field,  coordinates)){
-            --coordinates[0];
-            if(! (battle_field[coordinates]==1))
-            battle_field[coordinates]=4;
-            ++coordinates[0];
-        }
-        if(check_right_set(battle_field,  coordinates)){
-            ++coordinates[0];
-            if(! (battle_field[coordinates]==1))
-            battle_field[coordinates]=4;
-            --coordinates[0];
-        }
-        --coordinates[1];
-    }
-    if (check_up_set(battle_field,  coordinates)){
-        --coordinates[1];
-        if(! (battle_field[coordinates]==1))
-        battle_field[coordinates]=4;
-        if(check_left_set(battle_field,  coordinates)){
-            --coordinates[0];
-            if(! (battle_field[coordinates]==1))
-            battle_field[coordinates]=4;
-            ++coordinates[0];
-        }
-        if(check_right_set(battle_field,  coordinates)){
-            ++coordinates[0];
-            if(! (battle_field[coordinates]==1))
-            battle_field[coordinates]=4;
-            --coordinates[0];
-        }
-        ++coordinates[1];
-    }
-    if (check_left_set(battle_field,  coordinates)){
-        --coordinates[0];
-        if(! (battle_field[coordinates]==1))
-        battle_field[coordinates]=4;
-        if(check_up_set(battle_field,  coordinates)){
-            --coordinates[1];
-            if(! (battle_field[coordinates]==1))
-            battle_field[coordinates]=4;
-            ++coordinates[1];
-        }
-        if(check_down_set(battle_field,  coordinates)){
-            ++coordinates[1];
-            if(! (battle_field[coordinates]==1))
-            battle_field[coordinates]=4;
-            --coordinates[1];
-        }
-        ++coordinates[0];
-    }
-    if (check_right_set(battle_field,  coordinates)){
-        ++coordinates[0];
-        if(! (battle_field[coordinates]==1))
-        battle_field[coordinates]=4;
-        if(check_up_set(battle_field,  coordinates)){
-            --coordinates[1];
-            if(! (battle_field[coordinates]==1))
-            battle_field[coordinates]=4;
-            ++coordinates[1];
-        }
-        if(check_down_set(battle_field,  coordinates)){
-            ++coordinates[1];
-            if(! (battle_field[coordinates]==1))
-            battle_field[coordinates]=4;
-            --coordinates[1];
-        }
-        --coordinates[0];
-    }
-}
-
-//transforming code 4 to code 1 after destroing ship
-void transform (map <string, unsigned short> &battle_field){
-    int i=0, j=0;
-    string coordinates="A0";
-    for(i=0;i<10;i++){
-        coordinates[0]='A';
-        for(j=0;j<10;j++){
-            if (battle_field[coordinates]==4)
-                battle_field[coordinates]=1;
-            coordinates[0]++;
-        }
-        coordinates[1]++;
-    }
-}
-
 //shooting
 void shoot (map <string, unsigned short> &battle_field, string coordinates){
     switch(battle_field[coordinates]){
@@ -722,11 +674,145 @@ void shoot (map <string, unsigned short> &battle_field, string coordinates){
     }
 }
 
+//check status of ship
+bool ship_is_destroyed(map <string, unsigned short> battle_field, string coordinates){
+    bool is_destroyed=1;
+    string sub_coordinates=coordinates;
+    if (battle_field[coordinates]==2)
+        is_destroyed=0;
+    coordinates=sub_coordinates;
+    while(check_left_ship(battle_field, coordinates)){
+        if (battle_field[coordinates]==2)
+            is_destroyed=0;
+        --coordinates[0];
+    }
+    coordinates=sub_coordinates;
+    while(check_right_ship(battle_field, coordinates)){
+        if (battle_field[coordinates]==2)
+            is_destroyed=0;
+        ++coordinates[0];
+    }
+    coordinates=sub_coordinates;
+    while(check_up_ship(battle_field, coordinates)){
+        if (battle_field[coordinates]==2)
+            is_destroyed=0;
+        --coordinates[1];
+    }
+    coordinates=sub_coordinates;
+    while(check_up_ship(battle_field, coordinates)){
+        if (battle_field[coordinates]==2)
+            is_destroyed=0;
+        ++coordinates[1];
+    }
+    return is_destroyed;
+}
+
+//shot around destroyed cell of ship
+void shot_around_cell (map <string, unsigned short> &battle_field, string coordinates){
+    string sub_coordinates=coordinates;
+    cout<<"in"<<endl;
+    if (check_left_set){
+        --coordinates[0];
+        if((battle_field[coordinates]!=2) && (battle_field[coordinates]!=4))
+        battle_field[coordinates]=1;
+            if(check_up_set){
+                --coordinates[1];
+                if((battle_field[coordinates]!=2) && (battle_field[coordinates]!=4))
+                battle_field[coordinates]=1;
+                ++coordinates[1];
+            }
+            if(check_down_set){
+                ++coordinates[1];
+                if((battle_field[coordinates]!=2) && (battle_field[coordinates]!=4))
+                battle_field[coordinates]=1;
+                --coordinates[1];
+            }
+    }
+    coordinates=sub_coordinates;
+    if (check_right_set){
+        ++coordinates[0];
+        if((battle_field[coordinates]!=2) && (battle_field[coordinates]!=4))
+        battle_field[coordinates]=1;
+        if(check_up_set){
+            --coordinates[1];
+            if((battle_field[coordinates]!=2) && (battle_field[coordinates]!=4))
+            battle_field[coordinates]=1;
+            ++coordinates[1];
+        }
+        if(check_down_set){
+            ++coordinates[1];
+            if((battle_field[coordinates]!=2) && (battle_field[coordinates]!=4))
+            battle_field[coordinates]=1;
+            --coordinates[1];
+        }
+    }
+    coordinates=sub_coordinates;
+    if (check_down_set){
+        ++coordinates[1];
+        if((battle_field[coordinates]!=2) && (battle_field[coordinates]!=4))
+        battle_field[coordinates]=1;
+        if(check_left_set){
+            --coordinates[0];
+            if((battle_field[coordinates]!=2) && (battle_field[coordinates]!=4))
+            battle_field[coordinates]=1;
+            ++coordinates[0];
+        }
+        if(check_right_set){
+            ++coordinates[0];
+            if((battle_field[coordinates]!=2) && (battle_field[coordinates]!=4))
+            battle_field[coordinates]=1;
+            --coordinates[0];
+        }
+    }
+    coordinates=sub_coordinates;
+    if (check_up_set){
+        --coordinates[1];
+        if((battle_field[coordinates]!=2) && (battle_field[coordinates]!=4))
+        battle_field[coordinates]=1;
+        if(check_left_set){
+            --coordinates[0];
+            if((battle_field[coordinates]!=2) && (battle_field[coordinates]!=4))
+            battle_field[coordinates]=1;
+            ++coordinates[0];
+        }
+        if(check_right_set){
+            ++coordinates[0];
+            if((battle_field[coordinates]!=2) && (battle_field[coordinates]!=4))
+            battle_field[coordinates]=1;
+            --coordinates[0];
+        }
+    }
+}
+
+//shot around destroyed ship
+void shot_around_ship (map <string, unsigned short> &battle_field, string coordinates){
+    string sub_coordinates=coordinates;
+    shot_around_cell (battle_field, coordinates);
+    while(check_left_ship(battle_field, coordinates)){
+        --coordinates[0];
+        shot_around_cell (battle_field, coordinates);
+    }
+    coordinates=sub_coordinates;
+    while(check_right_ship(battle_field, coordinates)){
+        ++coordinates[0];
+        shot_around_cell (battle_field, coordinates);
+    }
+    coordinates=sub_coordinates;
+    while(check_up_ship(battle_field, coordinates)){
+        --coordinates[1];
+        shot_around_cell (battle_field, coordinates);
+    }
+    coordinates=sub_coordinates;
+    while(check_down_ship(battle_field, coordinates)){
+        ++coordinates[1];
+        shot_around_cell (battle_field, coordinates);
+    }
+}
 
     int main(){
 
     //O-empty, *-shoot, | - border, + - part of the ship, #-destroyed part of ship
-    //0-empty, 1-shoot, 2-ship, 3-unable to set ship, 4-destroyed part of ship ,5 - after destroy will be shoot;
+    //0-empty, 1-shoot, 2-ship, 3-unable to set ship, 4-destroyed part of ship;
 
     string direction,coordinates="A0";
     int i=0, decks, ship_value=0;
@@ -745,26 +831,8 @@ void shoot (map <string, unsigned short> &battle_field, string coordinates){
     bot_set_ships(bot_battle_field);
     show_battlefield (bot_battle_field);
 
-    cout<<"enter transform coord"<<endl;
-    cin>>coordinates;
-    transform(bot_battle_field, coordinates);
-    show_battlefield (bot_battle_field);
-
-    cout<<"enter transform coord"<<endl;
-    cin>>coordinates;
-    transform(bot_battle_field, coordinates);
-    show_battlefield (bot_battle_field);
-
-    cout<<"enter transform coord"<<endl;
-    cin>>coordinates;
-    transform(bot_battle_field, coordinates);
-    show_battlefield (bot_battle_field);
-
-    transform(bot_battle_field);
-    show_battlefield (bot_battle_field);
-
-    user_set_ship(my_battle_field);
-    show_battlefield (my_battle_field);
+    //user_set_ship(my_battle_field);
+    //show_battlefield (my_battle_field);
 
 
     return 0;
