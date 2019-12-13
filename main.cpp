@@ -65,8 +65,8 @@ void show_battlefield_open (map <string, unsigned short> battle_field){
             switch (battle_field[coordinates]) {
                 case 0:cout << 'O';break;
                 case 1:cout << '*';break;
-                case 2:cout << '-';break;
-                case 3:cout << '+';break;
+                case 2:cout << '+';break;
+                case 3:cout << '-';break;
                 case 4:cout << '#';break;
                 default: cout<<'&';
             }
@@ -544,7 +544,7 @@ void user_set_ships(map <string, unsigned short> &my_battle_field){
             else {
                 if (check(my_battle_field, coordinates, 4, direction)) {
                     set_ship(my_battle_field, coordinates, 4, direction);
-                    show_battlefield(my_battle_field);
+                    show_battlefield_open(my_battle_field);
                     ship_value++;
                 }
                 else
@@ -567,7 +567,7 @@ void user_set_ships(map <string, unsigned short> &my_battle_field){
             else {
                 if (check(my_battle_field, coordinates, 3, direction)) {
                     set_ship(my_battle_field, coordinates, 3, direction);
-                    show_battlefield(my_battle_field);
+                    show_battlefield_open(my_battle_field);
                     ship_value++;
                 }
                 else
@@ -590,7 +590,7 @@ void user_set_ships(map <string, unsigned short> &my_battle_field){
             else {
                 if (check(my_battle_field, coordinates, 2, direction)) {
                     set_ship(my_battle_field, coordinates, 2, direction);
-                    show_battlefield(my_battle_field);
+                    show_battlefield_open(my_battle_field);
                     ship_value++;
                 }
                 else
@@ -608,7 +608,7 @@ void user_set_ships(map <string, unsigned short> &my_battle_field){
         {
             if (check(my_battle_field, coordinates, 1, "here")) {
                 set_ship(my_battle_field, coordinates, 1, "here");
-                show_battlefield(my_battle_field);
+                show_battlefield_open(my_battle_field);
                 ship_value++;
             }
             else
@@ -675,13 +675,11 @@ void bot_set_ships (map <string, unsigned short> &bot_battle_field){
 
     while(ship_value !=1){
         coordinates=gen_coordinates();
-        cout<<"coord"<<endl<<coordinates<<endl;
         ship_is_set=0;
         if (((check(bot_battle_field, coordinates, 4, "left" )) || (check(bot_battle_field, coordinates, 4, "right" ))) || ((check(bot_battle_field, coordinates, 4, "up" )) || (check(bot_battle_field, coordinates, 4, "down" ))))
         {
             while (! ship_is_set) {
             direction=gen_direction();
-            cout<<"direct"<<endl<<direction<<endl;
             if(check(bot_battle_field, coordinates, 4, direction )) {
                 set_ship(bot_battle_field, coordinates, 4, direction);
                 ship_is_set=1;
@@ -999,9 +997,6 @@ string informed_shot (map <string, unsigned short> &battle_field, string directi
     clear_battlefield (my_battle_field);
     clear_battlefield (bot_battle_field);
 
-    show_battlefield (my_battle_field);
-    show_battlefield (bot_battle_field);
-
     bot_set_ships(bot_battle_field);
     show_battlefield (bot_battle_field);
 
@@ -1013,9 +1008,9 @@ string informed_shot (map <string, unsigned short> &battle_field, string directi
     if(i==1)
         show_battlefield_open(bot_battle_field);
 
-    while ((my_ship_value>0) && (bot_ship_value>0)) {
+    while ((my_ship_value>0) && (bot_ship_value>0) && (my_ship_value>0)) {
         player_is_need_move = 1;
-        while (player_is_need_move) {
+        while ((player_is_need_move) && (bot_ship_value>0)) {
             cout << "your turn" << endl;
             cout << "opponetn's battlefield" << endl;
             show_battlefield(bot_battle_field);
@@ -1028,9 +1023,13 @@ string informed_shot (map <string, unsigned short> &battle_field, string directi
                     shoot(bot_battle_field, coordinates);
                     if (bot_battle_field[coordinates] != 4)
                         player_is_need_move = 0;
-                    if (ship_is_destroyed(bot_battle_field, coordinates)) {
-                        shot_around_ship(bot_battle_field, coordinates);
-                        --bot_ship_value;
+                    if (bot_battle_field[coordinates] == 4) {
+                        if (ship_is_destroyed(bot_battle_field, coordinates)) {
+                            shot_around_ship(bot_battle_field, coordinates);
+                            --bot_ship_value;
+                            if(bot_ship_value==0)
+                                break;
+                        }
                     }
                 } else
                     cout << "wrong coordinates" << endl;
@@ -1040,7 +1039,7 @@ string informed_shot (map <string, unsigned short> &battle_field, string directi
         show_battlefield(bot_battle_field);
 
         bot_is_need_move = 1;
-        while (bot_is_need_move) {
+        while ((bot_is_need_move) && (my_ship_value>0) && (bot_ship_value>0)) {
             cout << "BOT turn" << endl;
             cout << "your battlefield" << endl;
             show_battlefield_open(my_battle_field);
@@ -1061,6 +1060,8 @@ string informed_shot (map <string, unsigned short> &battle_field, string directi
                         know_direction = 0;
                         try_to_destroy = 0;
                         --my_ship_value;
+                        if(my_ship_value==0)
+                            break;
                     }
                 }
             }
@@ -1083,6 +1084,8 @@ string informed_shot (map <string, unsigned short> &battle_field, string directi
                         know_direction = 0;
                         try_to_destroy = 0;
                         --my_ship_value;
+                        if(my_ship_value==0)
+                            break;
                     }
                 }
             }
@@ -1104,6 +1107,8 @@ string informed_shot (map <string, unsigned short> &battle_field, string directi
                         know_direction = 0;
                         try_to_destroy = 0;
                         --my_ship_value;
+                        if(my_ship_value==0)
+                            break;
                     }
                 }
             }
