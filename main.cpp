@@ -901,34 +901,23 @@ string bot_shot_to_find_direction (map <string, unsigned short> &battle_field, s
             sub_coordinates=coordinates;
             if(!(check_down_shot(battle_field, coordinates)) && (direction =="down")) {
                 ++sub_coordinates[1];
-                if((battle_field[coordinates] !=1) && (battle_field[coordinates] !=4)) {
-                    shoot(battle_field, sub_coordinates);
-                    is_need_move = 0;
-                }
+                shoot(battle_field, sub_coordinates);
+                is_need_move=0;
             }
-            sub_coordinates=coordinates
             if(!(check_up_shot(battle_field, coordinates)) && (direction =="up")) {
                 --sub_coordinates[1];
-                if((battle_field[coordinates] !=1) && (battle_field[coordinates] !=4)) {
-                    shoot(battle_field, sub_coordinates);
-                    is_need_move = 0;
-                }
+                shoot(battle_field, sub_coordinates);
+                is_need_move=0;
             }
-            sub_coordinates=coordinates
             if(!(check_right_shot(battle_field, coordinates)) && (direction =="right")) {
                 ++sub_coordinates[0];
-                if((battle_field[coordinates] !=1) && (battle_field[coordinates] !=4)) {
-                    shoot(battle_field, sub_coordinates);
-                    is_need_move = 0;
-                }
+                shoot(battle_field, sub_coordinates);
+                is_need_move=0;
             }
-            sub_coordinates=coordinates
             if(!(check_left_shot(battle_field, coordinates)) && (direction =="left")) {
                 --sub_coordinates[0];
-                if((battle_field[coordinates] !=1) && (battle_field[coordinates] !=4)) {
-                    shoot(battle_field, sub_coordinates);
-                    is_need_move = 0;
-                }
+                shoot(battle_field, sub_coordinates);
+                is_need_move=0;
             }
         }
         return sub_coordinates;
@@ -1073,8 +1062,6 @@ string informed_shot (map <string, unsigned short> &battle_field, string directi
                             break;
                     }
                 }
-                cout << "your battlefield" << endl;
-                show_battlefield_open(my_battle_field);
             }
             if ((try_to_destroy) && (!know_direction) && (bot_is_need_move)) {
                 sub_bot_coordinates = bot_shot_to_find_direction(my_battle_field, bot_coordinates);
@@ -1099,8 +1086,6 @@ string informed_shot (map <string, unsigned short> &battle_field, string directi
                             break;
                     }
                 }
-                cout << "your battlefield" << endl;
-                show_battlefield_open(my_battle_field);
             }
             if ((try_to_destroy) && (know_direction) && (bot_is_need_move)) {
                 sub_bot_coordinates = informed_shot(my_battle_field, bot_direction, bot_coordinates);
@@ -1124,10 +1109,10 @@ string informed_shot (map <string, unsigned short> &battle_field, string directi
                             break;
                     }
                 }
-                cout << "your battlefield" << endl;
-                show_battlefield_open(my_battle_field);
             }
         }
+        cout << "your battlefield" << endl;
+        show_battlefield_open(my_battle_field);
     }
     if (my_ship_value==0)
         cout<<"you LOST"<<endl;
